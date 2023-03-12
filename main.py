@@ -20,6 +20,9 @@ pygame.display.set_caption("PONG!")
 PADDLEINSET = 20
 PADDLEWIDTH = 10
 PADDLEHEIGHT = 60
+PADDLESPEED = 4
+
+# BALL Variables
 BALLSIZE = 10
 
 # Main function with game loop
@@ -30,19 +33,51 @@ def main():
     right_paddle_y = 50
     ball_X = WINDOW_WIDTH // 2
     ball_Y = WINDOW_HEIGHT // 2
+    ball_X_momentum = 1
+    ball_Y_momentum = 1
 
     # Main gameplay loop
     while running:
         # Get inputs
         for event in pygame.event.get():
+            # print(event.type)
             if event.type == QUIT:
                 pygame.quit()
                 return
             
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    pygame.quit()
-                    return
+            # Gets sequence of boolean values representing state of every key on
+            # keyboard and if they have been pressed
+            pressed = pygame.key.get_pressed()
+            print(pressed)
+            if pressed[K_ESCAPE]:
+                pygame.quit()
+                return
+            
+            if pressed[K_w]:
+                left_paddle_y -= PADDLESPEED
+            elif pressed[K_s]:
+                left_paddle_y += PADDLESPEED
+
+            if pressed[K_UP]:
+                right_paddle_y -= PADDLESPEED
+            elif pressed[K_DOWN]:
+                right_paddle_y += PADDLESPEED
+
+            # Handle if paddle has gone above or below the the screen
+            if left_paddle_y < 0:
+                left_paddle_y = 0
+            if left_paddle_y > WINDOW_HEIGHT - PADDLEHEIGHT:
+                left_paddle_y = WINDOW_HEIGHT - PADDLEHEIGHT
+            if right_paddle_y < 0:
+                right_paddle_y = 0
+            if right_paddle_y > WINDOW_HEIGHT - PADDLEHEIGHT:
+                right_paddle_y = WINDOW_HEIGHT - PADDLEHEIGHT
+            # if event.type == KEYDOWN:
+            #     # print(event.key)
+            #     if event.key == K_ESCAPE:
+            #         pygame.quit()
+            #         return
+            
         
         # Processing
         # pygame.Rect obj for holding rect coordinates
