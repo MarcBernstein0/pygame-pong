@@ -40,43 +40,43 @@ def main():
     while running:
         # Get inputs
         for event in pygame.event.get():
-            # print(event.type)
+            #print(event.type)
             if event.type == QUIT:
                 pygame.quit()
                 return
             
             # Gets sequence of boolean values representing state of every key on
             # keyboard and if they have been pressed
-            pressed = pygame.key.get_pressed()
-            print(pressed)
-            if pressed[K_ESCAPE]:
-                pygame.quit()
-                return
+        pressed = pygame.key.get_pressed()
+        # print(pressed)
+        if pressed[K_ESCAPE]:
+            pygame.quit()
+            return
             
-            if pressed[K_w]:
-                left_paddle_y -= PADDLESPEED
-            elif pressed[K_s]:
-                left_paddle_y += PADDLESPEED
+        if pressed[K_w]:
+            left_paddle_y -= PADDLESPEED
+        elif pressed[K_s]:
+            left_paddle_y += PADDLESPEED
 
-            if pressed[K_UP]:
-                right_paddle_y -= PADDLESPEED
-            elif pressed[K_DOWN]:
-                right_paddle_y += PADDLESPEED
+        if pressed[K_UP]:
+            right_paddle_y -= PADDLESPEED
+        elif pressed[K_DOWN]:
+            right_paddle_y += PADDLESPEED
 
-            # Handle if paddle has gone above or below the the screen
-            if left_paddle_y < 0:
-                left_paddle_y = 0
-            if left_paddle_y > WINDOW_HEIGHT - PADDLEHEIGHT:
-                left_paddle_y = WINDOW_HEIGHT - PADDLEHEIGHT
-            if right_paddle_y < 0:
-                right_paddle_y = 0
-            if right_paddle_y > WINDOW_HEIGHT - PADDLEHEIGHT:
-                right_paddle_y = WINDOW_HEIGHT - PADDLEHEIGHT
-            # if event.type == KEYDOWN:
-            #     # print(event.key)
-            #     if event.key == K_ESCAPE:
-            #         pygame.quit()
-            #         return
+        # Handle if paddle has gone above or below the the screen
+        if left_paddle_y < 0:
+            left_paddle_y = 0
+        if left_paddle_y > WINDOW_HEIGHT - PADDLEHEIGHT:
+            left_paddle_y = WINDOW_HEIGHT - PADDLEHEIGHT
+        if right_paddle_y < 0:
+            right_paddle_y = 0
+        if right_paddle_y > WINDOW_HEIGHT - PADDLEHEIGHT:
+            right_paddle_y = WINDOW_HEIGHT - PADDLEHEIGHT
+            
+        if ball_Y < BALLSIZE: # ball has hit the top of the screen
+            ball_Y_momentum = 1
+        if ball_Y > WINDOW_HEIGHT - BALLSIZE: # ball has hit the bottom
+            ball_Y_momentum = -1
             
         
         # Processing
@@ -84,6 +84,9 @@ def main():
         left_paddle_rect = pygame.Rect(PADDLEINSET, left_paddle_y, PADDLEWIDTH, PADDLEHEIGHT)
         right_paddle_rect = pygame.Rect(WINDOW_WIDTH - PADDLEINSET - PADDLEWIDTH, right_paddle_y, 
                                         PADDLEWIDTH, PADDLEHEIGHT)
+        
+        ball_X = ball_X + ball_X_momentum
+        ball_Y = ball_Y + ball_Y_momentum
 
         # Render elements of the game
         GAME_WINDOW.fill(BACKGROUND) # Fill a surface with a solid color 
