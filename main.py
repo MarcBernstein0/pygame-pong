@@ -25,6 +25,13 @@ PADDLESPEED = 4
 # BALL Variables
 BALLSIZE = 10
 
+def reset_ball(right_player_win):
+    ball_X = WINDOW_WIDTH // 2
+    ball_Y = WINDOW_HEIGHT // 2
+    ball_Y_momentum = random.choice([-1, 1])
+    ball_X_momentum =  1 if right_player_win else -1
+    return ball_X, ball_Y, ball_Y_momentum, ball_X_momentum
+
 # Main function with game loop
 def main():
     running = True
@@ -77,7 +84,18 @@ def main():
             ball_Y_momentum = 1
         if ball_Y > WINDOW_HEIGHT - BALLSIZE: # ball has hit the bottom
             ball_Y_momentum = -1
-            
+        if ball_X <= BALLSIZE: # Left player loses
+            ball_X, ball_Y, ball_Y_momentum, ball_X_momentum = reset_ball(True)
+        if ball_X >= WINDOW_WIDTH - BALLSIZE: # Right player loses
+            ball_X, ball_Y, ball_Y_momentum, ball_X_momentum = reset_ball(False)
+
+        # Ball has hit the paddles
+        if ball_X <= PADDLEINSET + PADDLEWIDTH and ball_X > PADDLEINSET: # check if the ball has hit the left paddle
+            if left_paddle_y < ball_Y and left_paddle_y + PADDLEHEIGHT > ball_Y:
+                ball_X_momentum = 1
+        if ball_X >= WINDOW_WIDTH - PADDLEINSET - PADDLEWIDTH and ball_X < WINDOW_WIDTH - PADDLEINSET: # check if the ball has hit the right paddle
+            if right_paddle_y < ball_Y and right_paddle_y + PADDLEHEIGHT > ball_Y:
+                ball_X_momentum = -1
         
         # Processing
         # pygame.Rect obj for holding rect coordinates
