@@ -6,6 +6,7 @@ pygame.init()
 # Colors
 BACKGROUND = (255, 255, 255)
 ELEMENTCOLOR = (100, 100, 100)
+SCORES = (0, 0, 0)
 
 # GAME Setup
 FPS = 60
@@ -42,6 +43,8 @@ def main():
     ball_Y = WINDOW_HEIGHT // 2
     ball_X_momentum = 1
     ball_Y_momentum = 1
+
+    scores = [0, 0]
 
     # Main gameplay loop
     while running:
@@ -85,8 +88,10 @@ def main():
         if ball_Y > WINDOW_HEIGHT - BALLSIZE: # ball has hit the bottom
             ball_Y_momentum = -1
         if ball_X <= BALLSIZE: # Left player loses
+            scores[1] += 1
             ball_X, ball_Y, ball_Y_momentum, ball_X_momentum = reset_ball(True)
         if ball_X >= WINDOW_WIDTH - BALLSIZE: # Right player loses
+            scores[0] += 1
             ball_X, ball_Y, ball_Y_momentum, ball_X_momentum = reset_ball(False)
 
         # Ball has hit the paddles
@@ -106,6 +111,13 @@ def main():
         ball_X = ball_X + ball_X_momentum
         ball_Y = ball_Y + ball_Y_momentum
 
+        font = pygame.font.Font(None, 74)
+        scores_left = font.render(str(scores[0]), 1, SCORES)
+        GAME_WINDOW.blit(scores_left, (50, 10))
+        scores_right = font.render(str(scores[1]), 1, SCORES)
+        GAME_WINDOW.blit(scores_right, (200, 10))
+
+
         # Render elements of the game
         GAME_WINDOW.fill(BACKGROUND) # Fill a surface with a solid color 
         # Draw a straight line 
@@ -117,6 +129,8 @@ def main():
         pygame.draw.circle(GAME_WINDOW, ELEMENTCOLOR, (ball_X, ball_Y), BALLSIZE)
         
         pygame.display.update()
+
+        # print(scores)
         fpsClock.tick(FPS)
     
 
